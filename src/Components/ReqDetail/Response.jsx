@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { useTheme } from '../../state/theme/Context';
 import Styles from './Response.styles.scss';
 
 const NoResponseText = () => (
@@ -9,6 +10,7 @@ const NoResponseText = () => (
 
 const Response = ({ data }) => {
   const content = data && data.body ? data.body : null;
+  const theme = useTheme();
 
   if (!content) {
     return <NoResponseText />;
@@ -16,9 +18,11 @@ const Response = ({ data }) => {
 
   return (
     <div className={Styles['response-content']}>
-      <pre className={Styles['log-body-colorless']}>
-        {content}
-      </pre>
+      {theme.previewRenderer ? theme.previewRenderer(data) : (
+        <pre className={Styles['log-body-colorless']}>
+          {content}
+        </pre>
+      )}
     </div>
   );
 };
